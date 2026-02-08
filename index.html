@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 PRIMEX GRUP v9.66 - Termux Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap">
+    <style>
+        :root {
+            --primary: #ff2a6d;
+            --secondary: #05d9e8;
+            --dark: #0c0e1c;
+            --darker: #080a16;
+            --light: #d1f7ff;
+            --gray: #2a2d3e;
+            --success: #00ff88;
+            --danger: #ff2a6d;
+            --warning: #ffcc00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .cyber-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            border: 2px solid var(--primary);
+            box-shadow: 
+                0 0 20px var(--primary),
+                inset 0 0 20px var(--primary);
+            animation: borderPulse 2s infinite;
+        }
+        
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            width: 300px;
+            background: rgba(12, 14, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 2px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                left: -300px;
+            }
+            .sidebar.active {
+                transform: translateX(300px);
+            }
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 0 15px var(--primary);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-pulse {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        .group-info h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 10px var(--secondary);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success);
+            animation: statusPulse 1.5s infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* ============ USER PROFILE ============ */
+        .user-profile {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--gray);
+            background: rgba(42, 45, 62, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .avatar-container {
+            position: relative;
+        }
+        
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            object-fit: cover;
+            box-shadow: 0 0 10px var(--secondary);
+            transition: transform 0.3s;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        .online-indicator {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .username {
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            margin-bottom: 3px;
+        }
+        
+        .user-status {
+            font-size: 12px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* ============ ONLINE USERS ============ */
+        .online-users {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            color: var(--secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-count {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .user-item:hover {
+            background: rgba(255, 42, 109, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            object-fit: cover;
+        }
+        
+        .user-name {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .user-status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        /* ============ MAIN CHAT ============ */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .chat-header {
+            padding: 15px 20px;
+            background: rgba(26, 29, 58, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .chat-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: white;
+            text-shadow: 0 0 5px var(--secondary);
+        }
+        
+        .chat-subtitle {
+            font-size: 13px;
+            color: var(--secondary);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray);
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-icon:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        /* ============ MESSAGES ============ */
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(
+                180deg,
+                rgba(12, 14, 28, 0.8) 0%,
+                rgba(26, 29, 58, 0.6) 100%
+            );
+            position: relative;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .message-outgoing {
+            justify-content: flex-end;
+        }
+        
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+            align-self: flex-end;
+            flex-shrink: 0;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            background: var(--gray);
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .message-outgoing .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-incoming .message-bubble {
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message-sender {
+            font-size: 12px;
+            color: var(--secondary);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .message-text {
+            line-height: 1.4;
+            font-size: 14px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .message-status {
+            position: absolute;
+            bottom: -15px;
+            right: 5px;
+            font-size: 10px;
+            color: var(--secondary);
+        }
+        
+        /* ============ TYPING INDICATOR ============ */
+        .typing-indicator {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--secondary);
+            font-size: 13px;
+            background: rgba(42, 45, 62, 0.5);
+            border-radius: 20px;
+            margin: 10px 0;
+            max-width: fit-content;
+            backdrop-filter: blur(5px);
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        /* ============ INPUT AREA ============ */
+        .input-container {
+            padding: 15px;
+            background: rgba(26, 29, 58, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--gray);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .message-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .message-input {
+            flex: 1;
+            padding: 12px 15px;
+            background: var(--gray);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            resize: none;
+            max-height: 120px;
+            min-height: 45px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .message-input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
+        .message-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-send {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4);
+        }
+        
+        .btn-send:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(255, 42, 109, 0.6);
+        }
+        
+        .btn-send:active {
+            transform: scale(0.95);
+        }
+        
+        /* ============ ERROR FLASH ============ */
+        .error-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--danger);
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 0 20px var(--danger);
+        }
+        
+        /* ============ NOTIFICATION ============ */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gray);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* ============ SCROLLBAR ============ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--secondary), var(--primary));
+        }
+        
+        /* ============ MOBILE MENU ============ */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 100;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+        
+        /* ============ ANIMATIONS ============ */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* ============ SYSTEM MESSAGE ============ */
+        .system-message {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 42, 109, 0.1);
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            font-size: 13px;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Border -->
+    <div class="cyber-border"></div>
+    
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Error Flash -->
+    <div class="error-flash" id="errorFlash"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- Header -->
+            <div class="sidebar-header">
+                <div class="logo-pulse"></div>
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="group-info">
+                    <h1>PRIMEX GRUP</h1>
+                    <div class="status">
+                        <div class="status-dot"></div>
+                        <span id="onlineCount">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="avatar-container">
+                    <img src="" alt="Avatar" class="avatar" id="userAvatar">
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="user-details">
+                    <div class="username" id="username">Guest</div>
+                    <div class="user-status">
+                        <i class="fas fa-circle"></i>
+                        <span id="userStatusText">Online</span>
+                    </div>
+                </div>
+                <button class="btn-icon" onclick="showSettings()">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            
+            <!-- Online Users -->
+            <div class="online-users">
+                <div class="section-title">
+                    <span><i class="fas fa-users"></i> ONLINE</span>
+                    <span class="user-count" id="userCount">0</span>
+                </div>
+                <div class="user-list" id="userList">
+                    <!-- Users will be added here -->
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div style="padding: 15px; text-align: center; font-size: 11px; color: var(--secondary);">
+                <div>🔥 PRIMEX v9.66</div>
+                <div>📅 2026-02-08 | 👨‍💻 Epan</div>
+            </div>
+        </div>
+        
+        <!-- Main Chat -->
+        <div class="main-chat">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div>
+                    <div class="chat-title">💀 PrimeX Grup</div>
+                    <div class="chat-subtitle" id="typingIndicator">
+                        <!-- Typing indicator will appear here -->
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" onclick="showInfo()" title="Info">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button class="btn-icon" onclick="clearChat()" title="Clear">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn-icon" onclick="toggleSound()" title="Sound">
+                        <i class="fas fa-volume-up" id="soundIcon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- System Message -->
+                <div class="system-message floating">
+                    🔥 Welcome to PRIMEX GRUP v9.66 - No filters, no restrictions!
+                </div>
+                
+                <!-- Messages will be added here -->
+            </div>
+            
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-actions">
+                    <button class="btn-icon" onclick="attachFile()" title="Attach">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="btn-icon" onclick="showEmojiPicker()" title="Emoji">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <button class="btn-icon" onclick="recordVoice()" title="Voice">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="btn-icon" onclick="takePhoto()" title="Camera">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                
+                <div class="message-input-wrapper">
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Type your message... (Press Enter to send)"
+                        rows="1"
+                        oninput="autoResize(this); handleTyping()"
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                    <button class="btn-send" onclick="sendMessage()" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-bell"></i>
+        <span id="notificationText">New message!</span>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        // ==================== CONFIGURATION ====================
+        const CONFIG = {
+            SOCKET_URL: window.location.origin,
+            SOUNDS: {
+                MESSAGE: 'https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3',
+                SEND: 'https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3',
+                ERROR: 'https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3',
+                NOTIFICATION: 'https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3',
+                TYPING: 'https://assets.mixkit.co/sfx/preview/mixkit-keyboard-typing-1386.mp3'
+            },
+            AVATAR_API: 'https://api.dicebear.com/7.x/avataaars/svg?seed=',
+            COLORS: {
+                PRIMARY: '#ff2a6d',
+                SECONDARY: '#05d9e8',
+                SUCCESS: '#00ff88'
+            }
+        };
+        
+        // ==================== STATE ====================
+        let socket = null;
+        let currentUser = null;
+        let onlineUsers = [];
+        let typingUsers = new Map();
+        let messages = [];
+        let soundEnabled = true;
+        let lastTypingTime = 0;
+        let reconnectAttempts = 0;
+        const MAX_RECONNECT_ATTEMPTS = 10;
+        
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeApp();
+            setupEventListeners();
+            loadSampleData();
+            showNotification('🔥 PRIMEX GRUP v9.66 activated!', 'success');
+        });
+        
+        async function initializeApp() {
+            // Initialize user
+            await initUser();
+            
+            // Initialize socket connection
+            initSocket();
+            
+            // Update UI
+            updateUserUI();
+        }
+        
+        // ==================== USER MANAGEMENT ====================
+        async function initUser() {
+            // Generate random user
+            const adjectives = ['Cyber', 'Dark', 'Ghost', 'Phantom', 'Shadow', 'Stealth', 'Void', 'Zero'];
+            const nouns = ['Hunter', 'Walker', 'Runner', 'Slayer', 'Killer', 'Master', 'Lord', 'King'];
+            const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+            const randomNumber = Math.floor(Math.random() * 999);
+            
+            const username = `${randomAdj}${randomNoun}${randomNumber}`;
+            
+            currentUser = {
+                id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                username: username,
+                avatar: CONFIG.AVATAR_API + username + Date.now(),
+                status: 'online',
+                joinDate: new Date(),
+                color: CONFIG.COLORS.PRIMARY
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('primex_user', JSON.stringify(currentUser));
+            
+            return currentUser;
+        }
+        
+        function updateUserUI() {
+            if (!currentUser) return;
+            
+            document.getElementById('username').textContent = currentUser.username;
+            document.getElementById('userAvatar').src = currentUser.avatar;
+            document.getElementById('userStatusText').textContent = currentUser.status;
+        }
+        
+        // ==================== SOCKET.IO ====================
+        function initSocket() {
+            console.log('🔗 Connecting to server...');
+            
+            socket = io(CONFIG.SOCKET_URL, {
+                transports: ['websocket', 'polling'],
+                reconnection: true,
+                reconnectionAttempts: MAX_RECONNECT_ATTEMPTS,
+                reconnectionDelay: 1000
+            });
+            
+            // Connection events
+            socket.on('connect', () => {
+                console.log('✅ Connected to server:', socket.id);
+                reconnectAttempts = 0;
+                
+                // Send login data
+                socket.emit('login', currentUser);
+                
+                // Show connection notification
+                showNotification('Connected to PRIMEX server', 'success');
+                playSound('NOTIFICATION');
+            });
+            
+            socket.on('disconnect', (reason) => {
+                console.log('❌ Disconnected:', reason);
+                showNotification('Disconnected from server', 'error');
+                
+                if (reason === 'io server disconnect') {
+                    // Server initiated disconnect, try to reconnect
+                    socket.connect();
+                }
+            });
+            
+            socket.on('connect_error', (error) => {
+                console.error('💀 Connection error:', error);
+                reconnectAttempts++;
+                
+                if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+                    showNotification('Failed to connect to server', 'error');
+                }
+            });
+            
+            socket.on('reconnect', (attemptNumber) => {
+                console.log('🔁 Reconnected after', attemptNumber, 'attempts');
+                showNotification('Reconnected to server', 'success');
+                socket.emit('login', currentUser);
+            });
+            
+            // Application events
+            socket.on('onlineUsers', (users) => {
+                onlineUsers = users;
+                updateOnlineUsersUI();
+            });
+            
+            socket.on('newMessage', (message) => {
+                addMessageToUI(message);
+                messages.push(message);
+                
+                // Play sound if not from current user
+                if (message.userId !== currentUser.id) {
+                    playSound('MESSAGE');
+                    
+                    // Show desktop notification if tab is not active
+                    if (document.hidden) {
+                        showDesktopNotification(message.username, message.content);
+                    }
+                }
+            });
+            
+            socket.on('userTyping', (data) => {
+                typingUsers.set(data.userId, data);
+                updateTypingIndicator();
+                
+                // Play typing sound
+                if (soundEnabled && data.userId !== currentUser.id) {
+                    playSound('TYPING');
+                }
+            });
+            
+            socket.on('userStopTyping', (userId) => {
+                typingUsers.delete(userId);
+                updateTypingIndicator();
+            });
+            
+            socket.on('userJoined', (user) => {
+                showNotification(`${user.username} joined the chat`, 'info');
+                confetti({
+                    particleCount: 50,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            });
+            
+            socket.on('userLeft', (user) => {
+                showNotification(`${user.username} left the chat`, 'warning');
+            });
+            
+            socket.on('error', (errorData) => {
+                console.error('💀 Server error:', errorData);
+                showError(errorData.message || 'Server error');
+            });
+            
+            socket.on('systemMessage', (message) => {
+                addSystemMessage(message);
+            });
+        }
+        
+        // ==================== MESSAGES ====================
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) {
+                showError('Message cannot be empty');
+                return;
+            }
+            
+            // Create message object
+            const message = {
+                id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                userId: currentUser.id,
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                content: content,
+                timestamp: new Date().toISOString(),
+                type: 'text',
+                status: 'sending'
+            };
+            
+            // Add to UI immediately (optimistic update)
+            addMessageToUI(message);
+            messages.push(message);
+            
+            // Send via socket if connected
+            if (socket && socket.connected) {
+                socket.emit('sendMessage', message);
+                socket.emit('stopTyping');
+            } else {
+                // Store for later if offline
+                storeOfflineMessage(message);
+                showNotification('Offline - message will be sent when connected', 'warning');
+            }
+            
+            // Clear input
+            input.value = '';
+            autoResize(input);
+            
+            // Play send sound
+            playSound('SEND');
+            
+            // Scroll to bottom
+            scrollToBottom();
+        }
+        
+        function addMessageToUI(message) {
+            const container = document.getElementById('messagesContainer');
+            const isOwnMessage = message.userId === currentUser.id;
+            const isSystem = message.type === 'system';
+            
+            if (isSystem) {
+                addSystemMessage(message.content);
+                return;
+            }
+            
+            const time = formatTime(message.timestamp);
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwnMessage ? 'message-outgoing' : 'message-incoming'}`;
+            messageDiv.dataset.messageId = message.id;
+            
+            messageDiv.innerHTML = `
+                ${!isOwnMessage ? `
+                    <img src="${message.avatar}" class="message-avatar" alt="${message.username}">
+                ` : ''}
+                
+                <div class="message-bubble">
+                    ${!isOwnMessage ? `
+                        <div class="message-sender">${escapeHtml(message.username)}</div>
+                    ` : ''}
+                    
+                    <div class="message-text">${formatMessageContent(message.content)}</div>
+                    
+                    <div class="message-time">${time}</div>
+                    
+                    ${isOwnMessage ? `
+                        <div class="message-status">
+                            ${message.status === 'sending' ? '🕒' : 
+                              message.status === 'sent' ? '✓' : 
+                              message.status === 'delivered' ? '✓✓' : 
+                              message.status === 'read' ? '👁️' : ''}
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${isOwnMessage ? `
+                    <img src="${message.avatar}" class="message-avatar" alt="${message.username}">
+                ` : ''}
+            `;
+            
+            container.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        function addSystemMessage(content) {
+            const container = document.getElementById('messagesContainer');
+            
+            const systemDiv = document.createElement('div');
+            systemDiv.className = 'system-message';
+            systemDiv.innerHTML = `⚡ ${content}`;
+            
+            container.appendChild(systemDiv);
+            scrollToBottom();
+        }
+        
+        function formatMessageContent(content) {
+            // Convert URLs to links
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            let formatted = content.replace(urlRegex, url => 
+                `<a href="${url}" target="_blank" style="color: ${CONFIG.COLORS.SECONDARY};">${url}</a>`
+            );
+            
+            // Convert newlines to <br>
+            formatted = formatted.replace(/\n/g, '<br>');
+            
+            // Basic emoji conversion
+            const emojiMap = {
+                ':)': '😊',
+                ':(': '😔',
+                ':D': '😃',
+                ':P': '😛',
+                ';)': '😉',
+                '<3': '❤️',
+                '</3': '💔',
+                ':O': '😮',
+                ':/': '😕',
+                ':|': '😐',
+                ':\\': '😕',
+                ':*': '😘',
+                '^^': '😊',
+                '^_^': '😊',
+                '-_-': '😑',
+                '>:(': '😠',
+                ';(': '😢'
+            };
+            
+            Object.entries(emojiMap).forEach(([code, emoji]) => {
+                const regex = new RegExp(code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+                formatted = formatted.replace(regex, emoji);
+            });
+            
+            // Escape HTML but preserve our links
+            const tempDiv = document.createElement('div');
+            tempDiv.textContent = formatted;
+            formatted = tempDiv.innerHTML;
+            
+            // Restore links
+            formatted = formatted.replace(/&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot; style=&quot;color: #05d9e8;&quot;&gt;(.*?)&lt;\/a&gt;/g, 
+                (match, url, text) => `<a href="${url}" target="_blank" style="color: ${CONFIG.COLORS.SECONDARY};">${text}</a>`);
+            
+            return formatted;
+        }
+        
+        // ==================== UI UPDATES ====================
+        function updateOnlineUsersUI() {
+            const container = document.getElementById('userList');
+            const countElement = document.getElementById('userCount');
+            const onlineCountElement = document.getElementById('onlineCount');
+            
+            // Update counts
+            countElement.textContent = onlineUsers.length;
+            onlineCountElement.textContent = `${onlineUsers.length} users online`;
+            
+            // Clear and rebuild list
+            container.innerHTML = '';
+            
+            onlineUsers.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <img src="${user.avatar}" class="user-avatar" alt="${user.username}">
+                    <div class="user-name">${user.username}</div>
+                    <div class="user-status-indicator"></div>
+                `;
+                
+                userItem.addEventListener('click', () => {
+                    // Focus input with mention
+                    const input = document.getElementById('messageInput');
+                    input.value = `@${user.username} `;
+                    input.focus();
+                });
+                
+                container.appendChild(userItem);
+            });
+        }
+        
+        function updateTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            
+            if (typingUsers.size > 0) {
+                const typingArray = Array.from(typingUsers.values());
+                const names = typingArray.map(u => u.username).slice(0, 2);
+                
+                let text = '';
+                if (names.length === 1) {
+                    text = `${names[0]} is typing...`;
+                } else if (names.length === 2) {
+                    text = `${names[0]} and ${names[1]} are typing...`;
+                } else {
+                    text = `${names[0]} and ${typingUsers.size - 1} others are typing...`;
+                }
+                
+                indicator.innerHTML = `
+                    <div class="typing-indicator">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span>${text}</span>
+                    </div>
+                `;
+            } else {
+                indicator.innerHTML = '';
+            }
+        }
+        
+        // ==================== UTILITIES ====================
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+        
+        function handleKeyDown(event) {
+            // Enter to send (without Shift)
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+            
+            // Escape to clear input
+            if (event.key === 'Escape') {
+                event.target.value = '';
+                autoResize(event.target);
+            }
+            
+            // Ctrl/Cmd + K to clear chat
+            if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+                event.preventDefault();
+                clearChat();
+            }
+        }
+        
+        function handleTyping() {
+            if (!socket || !socket.connected) return;
+            
+            const now = Date.now();
+            if (now - lastTypingTime > 1000) {
+                socket.emit('typing', {
+                    userId: currentUser.id,
+                    username: currentUser.username
+                });
+                lastTypingTime = now;
+            }
+        }
+        
+        function scrollToBottom() {
+            const container = document.getElementById('messagesContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            // Less than 1 minute
+            if (diff < 60000) {
+                return 'Just now';
+            }
+            
+            // Less than 1 hour
+            if (diff < 3600000) {
+                const minutes = Math.floor(diff / 60000);
+                return `${minutes}m ago`;
+            }
+            
+            // Less than 1 day
+            if (diff < 86400000) {
+                const hours = Math.floor(diff / 3600000);
+                return `${hours}h ago`;
+            }
+            
+            // More than 1 day
+            const days = Math.floor(diff / 86400000);
+            return `${days}d ago`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ==================== SOUND FUNCTIONS ====================
+        function playSound(type) {
+            if (!soundEnabled || !CONFIG.SOUNDS[type]) return;
+            
+            try {
+                const audio = new Audio(CONFIG.SOUNDS[type]);
+                audio.volume = 0.3;
+                audio.play().catch(e => console.log('Sound play failed:', e));
+            } catch (error) {
+                console.log('Sound error:', error);
+            }
+        }
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            
+            if (soundEnabled) {
+                icon.className = 'fas fa-volume-up';
+                showNotification('Sound enabled', 'success');
+                playSound('NOTIFICATION');
+            } else {
+                icon.className = 'fas fa-volume-mute';
+                showNotification('Sound disabled', 'warning');
+            }
+        }
+        
+        // ==================== NOTIFICATIONS ====================
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            
+            // Set color based on type
+            notification.style.background = 
+                type === 'success' ? CONFIG.COLORS.SUCCESS :
+                type === 'error' ? CONFIG.COLORS.PRIMARY :
+                type === 'warning' ? CONFIG.COLORS.SECONDARY :
+                '#2a2d3e';
+            
+            notification.classList.add('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+            
+            // Play notification sound
+            if (soundEnabled) {
+                playSound('NOTIFICATION');
+            }
+        }
+        
+        function showDesktopNotification(title, body) {
+            if (!("Notification" in window)) return;
+            
+            if (Notification.permission === "granted") {
+                new Notification(title, {
+                    body: body.substring(0, 100),
+                    icon: currentUser.avatar,
+                    badge: 'https://api.dicebear.com/7.x/avataaars/svg?seed=primex'
+                });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification(title, {
+                            body: body.substring(0, 100),
+                            icon: currentUser.avatar
+                        });
+                    }
+                });
+            }
+        }
+        
+        function showError(message) {
+            const errorFlash = document.getElementById('errorFlash');
+            
+            // Flash red animation
+            errorFlash.style.display = 'block';
+            errorFlash.style.background = CONFIG.COLORS.PRIMARY;
+            
+            // Play error sound
+            playSound('ERROR');
+            
+            // Show notification
+            showNotification(message, 'error');
+            
+            // Hide after 0.5 seconds
+            setTimeout(() => {
+                errorFlash.style.display = 'none';
+            }, 500);
+        }
+        
+        // ==================== ACTION FUNCTIONS ====================
+        function attachFile() {
+            showNotification('📎 File attachment feature coming soon!', 'info');
+        }
+        
+        function showEmojiPicker() {
+            showNotification('😀 Emoji picker coming soon!', 'info');
+        }
+        
+        function recordVoice() {
+            showNotification('🎤 Voice message recording coming soon!', 'info');
+        }
+        
+        function takePhoto() {
+            showNotification('📸 Camera feature coming soon!', 'info');
+        }
+        
+        function showSettings() {
+            const settings = `
+🔥 PRIMEX GRUP SETTINGS
+
+Username: ${currentUser.username}
+User ID: ${currentUser.id}
+Status: ${currentUser.status}
+Joined: ${currentUser.joinDate.toLocaleDateString()}
+
+Online Users: ${onlineUsers.length}
+Messages: ${messages.length}
+Sound: ${soundEnabled ? 'ON' : 'OFF'}
+
+Version: 9.66.0
+Created: 2026-02-08
+Creator: Epan
+            `;
+            alert(settings);
+        }
+        
+        function showInfo() {
+            const info = `
+╔══════════════════════════════╗
+║     🔥 PRIMEX GRUP v9.66     ║
+╚══════════════════════════════╝
+
+📅 Created: 2026-02-08
+👨‍💻 Creator: Epan
+💀 Version: 9.66.0
+
+⚡ Features:
+• Realtime messaging
+• No filters or restrictions
+• Dark cyber theme
+• Typing indicators
+• Sound effects
+• Online user list
+• Termux compatible
+
+🌐 Connection: ${socket?.connected ? 'Connected' : 'Disconnected'}
+👥 Online: ${onlineUsers.length} users
+💬 Messages: ${messages.length}
+
+🆔 Your ID: ${currentUser.id}
+🔗 Server: ${CONFIG.SOCKET_URL}
+            `;
+            alert(info);
+        }
+        
+        function clearChat() {
+            if (confirm('Clear all messages?')) {
+                const container = document.getElementById('messagesContainer');
+                // Keep only system message
+                const systemMsg = container.querySelector('.system-message');
+                container.innerHTML = '';
+                if (systemMsg) {
+                    container.appendChild(systemMsg);
+                }
+                messages = [];
+                showNotification('Chat cleared', 'success');
+            }
+        }
+        
+        function storeOfflineMessage(message) {
+            const offlineMessages = JSON.parse(localStorage.getItem('primex_offline_messages') || '[]');
+            offlineMessages.push(message);
+            localStorage.setItem('primex_offline_messages', JSON.stringify(offlineMessages.slice(-50)));
+        }
+        
+        // ==================== MOBILE MENU ====================
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (event) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (window.innerWidth <= 768 && 
+                sidebar.classList.contains('active') &&
+                !sidebar.contains(event.target) && 
+                !menuBtn.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // ==================== SAMPLE DATA ====================
+        function loadSampleData() {
+            const sampleMessages = [
+                {
+                    id: 'msg_system',
+                    userId: 'system',
+                    username: '🤖 PrimeX System',
+                    avatar: CONFIG.AVATAR_API + 'system',
+                    content: 'Welcome to the ultimate chat experience! No filters, no restrictions.',
+                    timestamp: new Date(Date.now() - 300000).toISOString(),
+                    type: 'system'
+                },
+                {
+                    id: 'msg_admin',
+                    userId: 'admin_001',
+                    username: '💀 PrimeX Admin',
+                    avatar: CONFIG.AVATAR_API + 'admin',
+                    content: 'This is PRIMEX GRUP v9.66 - Created by Epan on 2026-02-08',
+                    timestamp: new Date(Date.now() - 180000).toISOString(),
+                    type: 'text'
+                },
+                {
+                    id: 'msg_welcome',
+                    userId: 'user_demo',
+                    username: '🔥 CyberMaster',
+                    avatar: CONFIG.AVATAR_API + 'cyber',
+                    content: 'Type your message and press Enter to send! Try emojis like :) :D <3',
+                    timestamp: new Date(Date.now() - 60000).toISOString(),
+                    type: 'text'
+                },
+                {
+                    id: 'msg_features',
+                    userId: 'user_demo2',
+                    username: '⚡ DarkLord',
+                    avatar: CONFIG.AVATAR_API + 'dark',
+                    content: 'Features: Real-time chat, typing indicators, online users, sound effects, dark theme!',
+                    timestamp: new Date(Date.now() - 30000).toISOString(),
+                    type: 'text'
+                }
+            ];
+            
+            // Add sample messages with delay for effect
+            sampleMessages.forEach((msg, index) => {
+                setTimeout(() => {
+                    addMessageToUI(msg);
+                    messages.push(msg);
+                }, index * 500);
+            });
+            
+            // Add sample online users
+            onlineUsers = [
+                {
+                    id: 'admin_001',
+                    username: '💀 PrimeX Admin',
+                    avatar: CONFIG.AVATAR_API + 'admin',
+                    status: 'online'
+                },
+                {
+                    id: 'user_001',
+                    username: '🔥 CyberMaster',
+                    avatar: CONFIG.AVATAR_API + 'cyber',
+                    status: 'online'
+                },
+                {
+                    id: 'user_002',
+                    username: '⚡ DarkLord',
+                    avatar: CONFIG.AVATAR_API + 'dark',
+                    status: 'online'
+                },
+                {
+                    id: 'user_003',
+                    username: '👻 Phantom',
+                    avatar: CONFIG.AVATAR_API + 'phantom',
+                    status: 'online'
+                }
+            ];
+            
+            updateOnlineUsersUI();
+        }
+        
+        // ==================== EXPORT FUNCTIONS ====================
+        window.sendMessage = sendMessage;
+        window.autoResize = autoResize;
+        window.handleKeyDown = handleKeyDown;
+        window.handleTyping = handleTyping;
+        window.attachFile = attachFile;
+        window.showEmojiPicker = showEmojiPicker;
+        window.recordVoice = recordVoice;
+        window.takePhoto = takePhoto;
+        window.showSettings = showSettings;
+        window.showInfo = showInfo;
+        window.clearChat = clearChat;
+        window.toggleSound = toggleSound;
+        
+        // ==================== INITIAL CONFETTI ====================
+        setTimeout(() => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }, 1000);
+        
+        console.log('🔥 PRIMEX GRUP v9.66 initialized successfully!');
+        console.log('📅 Created: 2026-02-08');
+        console.log('👨‍💻 Creator: Epan');
+        console.log('💀 User:', currentUser.username);
+        console.log('🚀 Ready for destruction!');
+    </script>
+</body>
+</html>
